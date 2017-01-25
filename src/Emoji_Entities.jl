@@ -14,8 +14,11 @@ using StrTables
 
 include("emoji_table.jl")
 
-const _tab =
-    Emoji_Table(StrTables.load(joinpath(Pkg.dir("Emoji_Entities"), "data", "emoji.dat"))...)
+function __init__()
+    const global _tab =
+        Emoji_Table(StrTables.load(joinpath(Pkg.dir("Emoji_Entities"), "data", "emoji.dat"))...)
+    nothing
+end
 
 const _empty_str = ""
 const _empty_str_vec = Vector{String}()
