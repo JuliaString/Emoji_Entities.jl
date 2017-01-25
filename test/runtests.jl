@@ -29,8 +29,8 @@ end
 @testset "longestmatches" begin
     @test isempty(EE.longestmatches("\u2020 abcd"))
     for (chrs, exp) in (("\u26f5 abcd", ["boat", "sailboat"]),
-                        ("\U1f48d abcd", ["ring"]))
-#                        ("\U1f1fa\U1f1f8 foo", ["flag-us", "us"]))
+                        ("\U1f48d abcd", ["ring"]),
+                        ("\U1f1fa\U1f1f8 foo", ["flag-us", "us"]))
         res = EE.longestmatches(chrs)
         @test length(res) >= length(exp)
         @test intersect(res, exp) == exp

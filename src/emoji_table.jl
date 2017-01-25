@@ -1,6 +1,6 @@
 VER = UInt32(1)
 
-immutable Emoji_Table{T}
+immutable Emoji_Table{T} <: AbstractEntityTable
     ver::UInt32
     tim::String
     inf::String

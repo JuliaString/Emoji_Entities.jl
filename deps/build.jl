@@ -1,7 +1,7 @@
 using JSON
 using StrTables
 
-include("../src/emoji_table.jl")
+const VER = UInt32(1)
 
 const fname = "emoji_pretty.json"
 const vers  = "master" # Julia used 0f0cf4ea8845eb52d26df2a48c3c31c3b8cad14e
@@ -23,7 +23,7 @@ function sortsplit!{T}(index::Vector{UInt16}, vec::Vector{Tuple{T, UInt16}}, bas
     valvec, indvec, base
 end
 
-function make_emoji_tables(dpath, ver, fname)
+function make_tables(dpath, ver, fname)
     lname = joinpath(datapath, fname)
     if isfile(lname)
         println("Loaded: ", lname)
@@ -100,7 +100,7 @@ function make_emoji_tables(dpath, ver, fname)
 end
 
 println("Creating tables")
-tup = make_emoji_tables(dpath, vers, fname)
+tup = make_tables(dpath, vers, fname)
 savfile = joinpath(datapath, "emoji.dat")
 println("Saving tables to ", savfile)
 StrTables.save(savfile, tup)
