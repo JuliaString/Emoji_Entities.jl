@@ -16,6 +16,7 @@ EE = Emoji_Entities
 end
 
 @testset "matches" begin
+    @test isempty(EE.matches(""))
     @test isempty(EE.matches("\u2020"))
     @test isempty(EE.matches(SubString("This is \u2020", 9)))
     for (chrs, exp) in (("\u26f5", ["boat", "sailboat"]),
