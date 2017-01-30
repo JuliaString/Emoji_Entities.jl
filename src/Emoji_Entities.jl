@@ -12,7 +12,24 @@ module Emoji_Entities
 
 using StrTables
 
-include("emoji_table.jl")
+VER = UInt32(1)
+
+immutable Emoji_Table{T} <: AbstractEntityTable
+    ver::UInt32
+    tim::String
+    inf::String
+    base32::UInt32
+    base2c::UInt32
+    nam::StrTable{T}
+    ind::Vector{UInt16}
+    val16::Vector{UInt16}
+    ind16::Vector{UInt16}
+    val32::Vector{UInt16}
+    ind32::Vector{UInt16}
+    val2c::StrTable{T}
+    ind2c::Vector{UInt16}
+    max2c::UInt32
+end
 
 function __init__()
     const global _tab =
@@ -35,20 +52,16 @@ function _get_strings(val, tab, ind::Vector{UInt16})
     _tab.nam[ind[rng]]
 end
 
-"""Given a LaTeX name, return the string it represents, or an empty string if not found"""
 function lookupname(str::AbstractString)
     rng = searchsorted(_tab.nam, str)
     isempty(rng) ? _empty_str : _get_str(_tab.ind[rng.start])
 end
 
-"""Given a character, return all exact matches to the character as a vector"""
 matchchar(ch::Char) =
     (ch <= '\uffff'
      ? _get_strings(ch%UInt16, _tab.val16, _tab.ind16)
      : (ch <= '\U1ffff' ? _get_strings(ch%UInt16, _tab.val32, _tab.ind32) : _empty_str_vec))
 
-"""Given a string, return all exact matches to the string as a vector"""
-function matches end
 matches(str::AbstractString) = matches(String(str))
 function matches(vec::String)
     if isempty(vec)
@@ -60,8 +73,6 @@ function matches(vec::String)
     end
 end
 
-"""Given a string, return all of the longest matches to the beginning of the string as a vector"""
-function longestmatches end
 longestmatches(str::AbstractString) = longestmatches(convert(Vector{Char}, str))
 function longestmatches(vec::Vector{Char})
     isempty(vec) && return _empty_str_vec
@@ -88,8 +99,6 @@ function longestmatches(vec::Vector{Char})
 end
 
 
-"""Given a string, return all of the LaTeX names that start with that string, if any"""
-function completions end
 completions(str::AbstractString) = completions(String(str))
 completions(str::String) = StrTables.matchfirst(_tab.nam, str)
 
