@@ -14,7 +14,7 @@ using StrTables
 
 VER = UInt32(1)
 
-immutable Emoji_Table{T} <: AbstractEntityTable
+struct Emoji_Table{T} <: AbstractEntityTable
     ver::UInt32
     tim::String
     inf::String
@@ -46,7 +46,7 @@ function _get_str(ind)
     _tab.val2c[ind - _tab.base2c]
 end
     
-function _get_strings(val, tab, ind::Vector{UInt16})
+function _get_strings(val::T, tab::Vector{T}, ind::Vector{UInt16}) where {T}
     rng = searchsorted(tab, val)
     isempty(rng) && return _empty_str_vec
     _tab.nam[ind[rng]]
@@ -57,10 +57,11 @@ function lookupname(str::AbstractString)
     isempty(rng) ? _empty_str : _get_str(_tab.ind[rng.start])
 end
 
-matchchar(ch::Char) =
-    (ch <= '\uffff'
+matchchar(ch::UInt32) =
+    (ch <= 0x0ffff
      ? _get_strings(ch%UInt16, _tab.val16, _tab.ind16)
-     : (ch <= '\U1ffff' ? _get_strings(ch%UInt16, _tab.val32, _tab.ind32) : _empty_str_vec))
+     : (ch <= 0x1ffff ? _get_strings(ch%UInt16, _tab.val32, _tab.ind32) : _empty_str_vec))
+matchchar(ch::Char) = matchchar(UInt32(ch))
 
 matches(str::AbstractString) = matches(String(str))
 function matches(vec::String)
@@ -97,7 +98,6 @@ function longestmatches(vec::Vector{Char})
     # Fall through and check only the first character
     matchchar(ch)
 end
-
 
 completions(str::AbstractString) = completions(String(str))
 completions(str::String) = StrTables.matchfirst(_tab.nam, str)
