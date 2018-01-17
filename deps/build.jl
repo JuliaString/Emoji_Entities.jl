@@ -3,25 +3,14 @@ using StrTables
 
 const VER = UInt32(1)
 
-const fname = "emoji_pretty.json"
+const inpname = "emoji_pretty.json"
 const vers  = "master" # Julia used 0f0cf4ea8845eb52d26df2a48c3c31c3b8cad14e
 const dpath = "https://raw.githubusercontent.com/iamcal/emoji-data/"
 
+const fname = "emoji.dat"
 const datapath = joinpath(Pkg.dir(), "Emoji_Entities", "data")
 
-function sortsplit!{T}(index::Vector{UInt16}, vec::Vector{Tuple{T, UInt16}}, base)
-    sort!(vec)
-    len = length(vec)
-    valvec = Vector{T}(len)
-    indvec = Vector{UInt16}(len)
-    for (i, val) in enumerate(vec)
-        valvec[i], ind = val
-        indvec[i] = ind
-        index[ind] = UInt16(base + i)
-    end
-    base += len
-    valvec, indvec, base
-end
+const disp = [false]
 
 function make_tables(dpath, ver, fname)
     lname = joinpath(datapath, fname)
@@ -35,32 +24,32 @@ function make_tables(dpath, ver, fname)
     end
     emojidata = JSON.parsefile(lname)
 
-    symnam = Vector{String}()
-    symval = Vector{Vector{Char}}()
+    symnam = String[]
+    symval = Vector{UInt32}[]
     ind = 0
     for emoji in emojidata
         # Make a vector of Chars out of hex data
         unified = emoji["unified"]
-        unistr = [Char(parse(UInt32, str, 16)) for str in split(unified,'-')]
+        unistr = UInt32[parse(UInt32, str, 16) for str in split(unified,'-')]
         vecnames = emoji["short_names"]
         for name in vecnames
-            println('#', ind += 1, '\t', unified, '\t', name)
+            disp[] && println('#', ind += 1, '\t', unified, '\t', name)
             push!(symnam, name)
             push!(symval, unistr)
         end
     end
-    println()
+    disp[] && println()
 
     # Get emoji names sorted
     srtnam = sortperm(symnam)
     srtval = symval[srtnam]
 
     # BMP characters
-    l16 = Vector{Tuple{UInt16, UInt16}}()
+    l16 = Tuple{UInt16, UInt16}[]
     # non-BMP characters (in range 0x10000 - 0x1ffff)
-    l32 = Vector{Tuple{UInt16, UInt16}}()
+    l32 = Tuple{UInt16, UInt16}[]
     # Vector of characters
-    l2c = Vector{Tuple{String, UInt16}}()
+    l2c = Tuple{String, UInt16}[]
 
     max2c = 1
     for i in eachindex(srtnam)
@@ -68,12 +57,12 @@ function make_tables(dpath, ver, fname)
         len = length(chrs)
         if len > 1
             max2c = max(max2c, len)
-            push!(l2c, (String(chrs), i))
+            push!(l2c, (String(Char[ch for ch in chrs]), i))
         else
             ch = chrs[1]
-            if ch > '\U1ffff'
-                error("Character $ch too large: $(UInt32(ch))")
-            elseif ch > '\uffff'
+            if ch > 0x1ffff
+                error("Character $ch too large")
+            elseif ch > 0x0ffff
                 push!(l32, (ch%UInt16, i))
             else
                 push!(l16, (ch%UInt16, i))
@@ -89,7 +78,7 @@ function make_tables(dpath, ver, fname)
     # in each table to the index into the name table (so that we can find multiple names for
     # each character)
 
-    indvec = Vector{UInt16}(length(srtnam))
+    indvec = create_vector(UInt16, length(srtnam))
     vec16, ind16, base32 = sortsplit!(indvec, l16, 0)
     vec32, ind32, base2c = sortsplit!(indvec, l32, base32)
     vec2c, ind2c, basefn = sortsplit!(indvec, l2c, base2c)
@@ -100,8 +89,14 @@ function make_tables(dpath, ver, fname)
 end
 
 println("Creating tables")
-tup = make_tables(dpath, vers, fname)
-savfile = joinpath(datapath, "emoji.dat")
+tup = nothing
+try
+    global tup
+    tup = make_tables(dpath, vers, inpname)
+catch ex
+    println(sprint(showerror, ex, catch_backtrace()))
+end
+savfile = joinpath(datapath, fname)
 println("Saving tables to ", savfile)
 StrTables.save(savfile, tup)
 println("Done")
