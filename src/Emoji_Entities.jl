@@ -32,7 +32,7 @@ struct Emoji_Table{T} <: AbstractEntityTable
 end
 
 function __init__()
-    const global _tab =
+    global _tab =
         Emoji_Table(StrTables.load(joinpath(Pkg.dir("Emoji_Entities"), "data", "emoji.dat"))...)
     nothing
 end
