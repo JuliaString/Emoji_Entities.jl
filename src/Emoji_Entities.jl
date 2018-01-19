@@ -46,7 +46,7 @@ function _get_str(ind)
     _tab.val2c[ind - _tab.base2c]
 end
     
-function _get_strings(val::T, tab::Vector{T}, ind::Vector{UInt16}) where {T}
+function _get_strings(val, tab, ind::Vector{UInt16})
     rng = searchsorted(tab, val)
     isempty(rng) && return _empty_str_vec
     _tab.nam[ind[rng]]
