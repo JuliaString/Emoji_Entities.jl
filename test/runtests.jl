@@ -1,5 +1,6 @@
 using Emoji_Entities
-using Base.Test
+
+@static VERSION < v"0.7.0-DEV" ? (using Base.Test) : (using Test)
 
 # Test the functions lookupname, matches, longestmatches, completions
 # Check that characters from all 3 tables (BMP, non-BMP, string) are tested
