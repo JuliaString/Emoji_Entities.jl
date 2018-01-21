@@ -37,11 +37,9 @@ function __init__()
     nothing
 end
 
-import StrTables: matchchar, matches, longmatches, _get_strings, _empty_str_vec, matchfirstrng
-
 StrTables._get_val2c(tab::Emoji_Table, val) = val
 
-function matches(tab::Emoji_Table, vec::String)
+function StrTables.matches(tab::Emoji_Table, vec::String)
     (isempty(vec)
      ? _empty_str_vec
      : (length(vec) == 1
@@ -49,9 +47,9 @@ function matches(tab::Emoji_Table, vec::String)
         : _get_strings(tab, vec, tab.val2c, tab.ind2c)))
 end
 
-matches(tab::Emoji_Table, str::AbstractString) = matches(tab, String(str))
+StrTables.matches(tab::Emoji_Table, str::AbstractString) = matches(tab, String(str))
 
-function longestmatches(tab::Emoji_Table, vec::Vector{T}) where {T}
+function StrTables.longestmatches(tab::Emoji_Table, vec::Vector{T}) where {T}
     isempty(vec) && return _empty_str_vec
     ch = vec[1]
     len = length(vec)
