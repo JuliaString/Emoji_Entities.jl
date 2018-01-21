@@ -41,21 +41,21 @@ StrTables._get_val2c(tab::Emoji_Table, val) = val
 
 function StrTables.matches(tab::Emoji_Table, vec::String)
     (isempty(vec)
-     ? _empty_str_vec
+     ? StrTables._empty_str_vec
      : (length(vec) == 1
         ? matchchar(tab, vec[1])
-        : _get_strings(tab, vec, tab.val2c, tab.ind2c)))
+        : StrTables._get_strings(tab, vec, tab.val2c, tab.ind2c)))
 end
 
 StrTables.matches(tab::Emoji_Table, str::AbstractString) = matches(tab, String(str))
 
 function StrTables.longestmatches(tab::Emoji_Table, vec::Vector{T}) where {T}
-    isempty(vec) && return _empty_str_vec
+    isempty(vec) && return StrTables._empty_str_vec
     ch = vec[1]
     len = length(vec)
     len == 1 && return matchchar(tab, ch)
     # Get range that matches the first character, if any
-    rng = matchfirstrng(tab.val2c, string(ch))
+    rng = StrTables.matchfirstrng(tab.val2c, string(ch))
     if !isempty(rng)
         maxlen = min(len, tab.max2c)
         # Truncate vec
@@ -64,7 +64,7 @@ function StrTables.longestmatches(tab::Emoji_Table, vec::Vector{T}) where {T}
         for l = 2:maxlen
             length(rng) == 1 && break
             prevrng = rng
-            rng = matchfirstrng(tab.val2c, string(vec[1:l]))
+            rng = StrTables.matchfirstrng(tab.val2c, string(vec[1:l]))
             isempty(rng) && (rng = prevrng; break)
         end
         return tab.nam[tab.ind2c[rng]]
