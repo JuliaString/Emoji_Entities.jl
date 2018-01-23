@@ -30,7 +30,7 @@ function make_tables(dpath, ver, fname)
     for emoji in emojidata
         # Make a vector of Chars out of hex data
         unified = emoji["unified"]
-        unistr = UInt32[parse(UInt32, str, 16) for str in split(unified,'-')]
+        unistr = UInt32[parse_hex(UInt32, str) for str in split(unified,'-')]
         vecnames = emoji["short_names"]
         for name in vecnames
             disp[] && println('#', ind += 1, '\t', unified, '\t', name)
