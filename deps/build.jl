@@ -12,6 +12,11 @@ const datapath = joinpath(pkg_dir(), "Emoji_Entities", "data")
 
 const disp = [false]
 
+# Get manual additions to the tables
+include("../src/manual_emoji.jl")
+
+str_to_uint32(str) = UInt32[ch%UInt32 for ch in str]
+
 function make_tables(dpath, ver, fname)
     lname = joinpath(datapath, fname)
     if isfile(lname)
@@ -24,18 +29,25 @@ function make_tables(dpath, ver, fname)
     end
     emojidata = JSON.parsefile(lname)
 
-    symnam = String[]
-    symval = Vector{UInt32}[]
+    mandict = Dict(manual)
+    symnam = String[ n for (n, v) in manual ]
+    symval = Vector{UInt32}[ str_to_uint32(v) for (n, v) in manual ]
     ind = 0
     for emoji in emojidata
         # Make a vector of Chars out of hex data
         unified = emoji["unified"]
         unistr = UInt32[parse_hex(UInt32, str) for str in split(unified,'-')]
+        strval = String(Char.(unistr))
         vecnames = emoji["short_names"]
         for name in vecnames
-            disp[] && println('#', ind += 1, '\t', unified, '\t', name)
-            push!(symnam, name)
-            push!(symval, unistr)
+            manval = get(mandict, name, "")
+            if manval == ""
+                disp[] && println('#', ind += 1, '\t', unified, '\t', name)
+                push!(symnam, name)
+                push!(symval, unistr)
+            else
+                println(name, " => ", strval, "  overridden by manual entry: ", manval)
+            end
         end
     end
     disp[] && println()
