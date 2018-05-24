@@ -1,0 +1,6 @@
+desc = "Entities from Emoji data tables"
+keywords = ["Entities", "Emoji"]
+license = "MIT"
+name = "Emoji_Entities"
+uuid = "fd8f23de-bd2f-5c75-921c-0c9ab51355f5"
+repo = "https://github.com/JuliaString/Emoji_Entities.jl.git"
