@@ -8,7 +8,7 @@ const vers  = "master" # Julia used 0f0cf4ea8845eb52d26df2a48c3c31c3b8cad14e
 const dpath = "https://raw.githubusercontent.com/iamcal/emoji-data/"
 
 const fname = "emoji.dat"
-const datapath = joinpath(pkg_dir(), "Emoji_Entities", "data")
+const datapath = "../data"
 
 const disp = [false]
 

@@ -33,7 +33,7 @@ end
 
 function __init__()
     global default =
-        Emoji_Table(StrTables.load(joinpath(pkg_dir("Emoji_Entities"), "data", "emoji.dat"))...)
+        Emoji_Table(StrTables.load(joinpath(@__DIR__, "../data", "emoji.dat"))...)
     nothing
 end
 
