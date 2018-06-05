@@ -15,8 +15,8 @@
 [travis-s-img]: https://travis-ci.org/JuliaString/Emoji_Entities.jl.svg
 [travis-m-img]: https://travis-ci.org/JuliaString/Emoji_Entities.jl.svg?branch=master
 
-[app-s-url]:    https://ci.appveyor.com/project/ScottPJones/emoji_entities-jl
-[app-m-url]:    https://ci.appveyor.com/project/ScottPJones/emoji_entities-jl/branch/master
+[app-s-url]:    https://ci.appveyor.com/project/ScottPJones/emoji-entities-jl
+[app-m-url]:    https://ci.appveyor.com/project/ScottPJones/emoji-entities-jl/branch/master
 [app-s-img]:    https://ci.appveyor.com/api/projects/status/4p6o3reehca95put?svg=true
 [app-m-img]:    https://ci.appveyor.com/api/projects/status/4p6o3reehca95put/branch/master?svg=true
 
