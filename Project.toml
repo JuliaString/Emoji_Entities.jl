@@ -4,6 +4,7 @@ keywords = ["Entities", "Emoji"]
 license = "MIT"
 name = "Emoji_Entities"
 uuid = "fd8f23de-bd2f-5c75-921c-0c9ab51355f5"
+version = "0.2.6"
 
 [deps]
 Pkg  = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
