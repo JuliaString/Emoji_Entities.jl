@@ -4,7 +4,7 @@ keywords = ["Entities", "Emoji"]
 license = "MIT"
 name = "Emoji_Entities"
 uuid = "fd8f23de-bd2f-5c75-921c-0c9ab51355f5"
-version = "0.2.7"
+version = "0.3.0"
 
 [deps]
 StrTables = "9700d1a9-a7c8-5760-9816-a99fda30bb8f"
