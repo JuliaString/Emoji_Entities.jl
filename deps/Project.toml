@@ -3,7 +3,7 @@ desc = "Build entities from Emoji data tables"
 keywords = ["Entities", "Emoji"]
 license = "MIT"
 name = "Emoji_Entities Build"
-version = "1.0.1"
+version = "1.0.2"
 
 [deps]
 StrTables = "9700d1a9-a7c8-5760-9816-a99fda30bb8f"
