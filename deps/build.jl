@@ -1,5 +1,5 @@
 const fname = "emoji.dat"
-const datapath = "../data"
+const datapath = joinpath(@__DIR__, "..", "data")
 
 savfile = joinpath(datapath, fname)
 isfile(savfile) && (println("Tables already exist") ; return)
@@ -19,7 +19,7 @@ const dpath = "https://raw.githubusercontent.com/iamcal/emoji-data/"
 const disp = [false]
 
 # Get manual additions to the tables
-include("../src/manual_emoji.jl")
+include(joinpath(@__DIR__, "..", "src", "manual_emoji.jl"))
 
 str_to_uint32(str) = UInt32[ch%UInt32 for ch in str]
 
@@ -111,9 +111,9 @@ println("Creating tables")
 try
     global tup
     tup = make_tables(dpath, vers, inpname)
+    println("Saving tables to ", savfile)
+    StrTables.save(savfile, tup)
+    println("Done")
 catch ex
     println(sprint(showerror, ex, catch_backtrace()))
 end
-println("Saving tables to ", savfile)
-StrTables.save(savfile, tup)
-println("Done")
