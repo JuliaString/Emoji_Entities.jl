@@ -1,3 +1,6 @@
+const fname = "emoji.dat"
+const datapath = "../data"
+
 savfile = joinpath(datapath, fname)
 isfile(savfile) && (println("Tables already exist") ; return)
 
@@ -12,9 +15,6 @@ const VER = UInt32(1)
 const inpname = "emoji_pretty.json"
 const vers  = "master" # Julia used 0f0cf4ea8845eb52d26df2a48c3c31c3b8cad14e
 const dpath = "https://raw.githubusercontent.com/iamcal/emoji-data/"
-
-const fname = "emoji.dat"
-const datapath = "../data"
 
 const disp = [false]
 
