@@ -1,3 +1,12 @@
+const fname = "emoji.dat"
+const datapath = joinpath(@__DIR__, "..", "data")
+
+savfile = joinpath(datapath, fname)
+isfile(savfile) && (println("Tables already exist") ; return)
+
+import Pkg
+Pkg.add("JSON")
+
 using JSON
 using StrTables
 
@@ -7,13 +16,10 @@ const inpname = "emoji_pretty.json"
 const vers  = "master" # Julia used 0f0cf4ea8845eb52d26df2a48c3c31c3b8cad14e
 const dpath = "https://raw.githubusercontent.com/iamcal/emoji-data/"
 
-const fname = "emoji.dat"
-const datapath = "../data"
-
 const disp = [false]
 
 # Get manual additions to the tables
-include("../src/manual_emoji.jl")
+include(joinpath(@__DIR__, "..", "src", "manual_emoji.jl"))
 
 str_to_uint32(str) = UInt32[ch%UInt32 for ch in str]
 
@@ -100,19 +106,14 @@ function make_tables(dpath, ver, fname)
      vec16, ind16, vec32, ind32, StrTable(vec2c), ind2c, max2c%UInt32)
 end
 
-savfile = joinpath(datapath, fname)
-if isfile(savfile)
-    println("Tables already exist")
-else
-    tup = nothing
-    println("Creating tables")
-    try
-        global tup
-        tup = make_tables(dpath, vers, inpname)
-    catch ex
-        println(sprint(showerror, ex, catch_backtrace()))
-    end
+tup = nothing
+println("Creating tables")
+try
+    global tup
+    tup = make_tables(dpath, vers, inpname)
     println("Saving tables to ", savfile)
     StrTables.save(savfile, tup)
     println("Done")
+catch ex
+    println(sprint(showerror, ex, catch_backtrace()))
 end
