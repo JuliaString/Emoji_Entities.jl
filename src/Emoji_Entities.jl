@@ -1,4 +1,5 @@
-__precompile__()
+# License is MIT: https://github.com/JuliaString/Emoji_Entities/LICENSE.md
+
 """
 # Public API (nothing is exported)
 
@@ -10,7 +11,7 @@ __precompile__()
 """
 module Emoji_Entities
 
-using StrTables
+using StrTables, RelocatableFolders
 
 VER = UInt32(1)
 
@@ -31,9 +32,10 @@ struct Emoji_Table{T} <: AbstractEntityTable
     max2c::UInt32
 end
 
+const DATA_PATH = @path joinpath(@__DIR__, "../data", "emoji.dat")
+
 function __init__()
-    global default =
-        Emoji_Table(StrTables.load(joinpath(@__DIR__, "../data", "emoji.dat"))...)
+    global default = Emoji_Table(StrTables.load(DATA_PATH))
     nothing
 end
 
