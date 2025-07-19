@@ -35,7 +35,7 @@ end
 const DATA_PATH = @path joinpath(@__DIR__, "../data", "emoji.dat")
 
 function __init__()
-    global default = Emoji_Table(StrTables.load(DATA_PATH))
+    global default = Emoji_Table(StrTables.load(DATA_PATH)...)
     nothing
 end
 
