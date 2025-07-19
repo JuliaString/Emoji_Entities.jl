@@ -36,3 +36,5 @@ Emoji_Entities.jl
 This builds tables for looking up Emoji names and returning the Unicode character(s),
 looking up a character or pair of characters and finding Emoji names that return it/them,
 and finding all of the Emoji name completions for a particular string, if any.
+
+Version 1.2 supports Unicode v16.0
