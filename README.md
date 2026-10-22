@@ -38,3 +38,4 @@ looking up a character or pair of characters and finding Emoji names that return
 and finding all of the Emoji name completions for a particular string, if any.
 
 Version 1.2 supports Unicode v16.0
+Version 1.3 supports Unicode v18.0
